@@ -125,7 +125,7 @@ Added the above policy while creating the role. By selecting the trusted entity 
 Then apply it to the ec2 instance that was created in the first step.
 
 Security group configuration for the EC2 instance to allow web traffic on port 80
-![Screenshot](Screenshot 2024-06-15 at 9.58.42 PM.png)
+![Screenshot](screenshot.png)
 
 
 ## 6. Automation and Scheduling:
@@ -137,8 +137,36 @@ crontab -e
 # then add this to cron
 */5 * * * * /home/ubuntu/checkHealth.sh
 ```
+Start and Stop the EC2 instance at specified times using AWS Lambda
+IAM Role that is used to give access to lambda for ec2 and cloudwatchevents
+Added the policy to the role AmazonEC2FullAccess and CloudWatchEventsFullAccess
+Functions added to instance are :
+For start instance
+```
+import boto3
+
+def lambda_handler(event, context):
+    ec2 = boto3.client('ec2')
+    instances = ['i-0ca9500ed34f91134']  
+    ec2.start_instances(InstanceIds=instances)
+    print('Started instances: ' + str(instances))
+```
+For stop instance
+```
+import boto3
+
+def lambda_handler(event, context):
+    ec2 = boto3.client('ec2')
+    instances = ['i-0ca9500ed34f91134']
+    ec2.stop_instances(InstanceIds=instances)
+    print('Stopped instances: ' + str(instances))
+```
+To add these with cloudwatch events: 
+Simply create a rule : First to schedule startEC2instance Lambda set the cron as 0 8 * * ? * and  to schedule the stopEC2instance Lambda 0 18 * * ? * 
+This will schedule to start instance everyday at 8 AM UTC and stop the instance at 6 PM UTC.
 
 
+I have described all the tasks and thier steps I faced one issue while using the command pip install flask gunicorn but then I added the virtual env and it solved the issue.
 
 
 
