@@ -125,7 +125,7 @@ Added the above policy while creating the role. By selecting the trusted entity 
 Then apply it to the ec2 instance that was created in the first step.
 
 Security group configuration for the EC2 instance to allow web traffic on port 80
-![Screenshot](images/screenshot.png)
+![Screenshot](Screenshot 2024-06-15 at 9.58.42 PM.png)
 
 
 ## 6. Automation and Scheduling:
